@@ -1,0 +1,1680 @@
+{
+  "info": {
+    "_postman_id": "64e2c8ea-741f-46a9-a8c3-4b90092d9e16",
+    "name": "DemoShopping",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51891817",
+    "_collection_link": "https://go.postman.co/collection/51891817-64e2c8ea-741f-46a9-a8c3-4b90092d9e16?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Список всех продуктов",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is less than 500ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"The list of products received in response has the correct structure.\", function () {\r",
+                  "    let responseData = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(Array.isArray(responseData)).to.be.true;\r",
+                  "    \r",
+                  "    if (Array.isArray(responseData)) {\r",
+                  "        responseData.forEach((item) => {\r",
+                  "            pm.expect(item).to.have.property('product_id').that.is.a('number');\r",
+                  "            pm.expect(item).to.have.property('name').that.is.a('string');\r",
+                  "            pm.expect(item).to.have.property('description').that.is.a('string');\r",
+                  "            pm.expect(item).to.have.property('price').that.is.a('string');\r",
+                  "            pm.expect(item).to.have.property('category').that.is.a('string');\r",
+                  "            pm.expect(item).to.have.property('manufacturer').that.is.a('string');\r",
+                  "            pm.expect(item).to.have.property('imageUrl').that.is.a('string');\r",
+                  "            pm.expect(item).to.have.property('freeShipping').that.is.oneOf([0, 1]);\r",
+                  "        });\r",
+                  "    }\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{url}}/products",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавление нового продукта",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is less than 500ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"The response body contains information about adding a product\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Продукт успешно добавлен с ID:\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Product ID saved to collection variables\", function () {\r",
+                  "const responseText = pm.response.text();\r",
+                  "const match = responseText.match(/ID:\\s*(\\d+)/);\r",
+                  "\r",
+                  "if (match && match[1]) {\r",
+                  "    pm.collectionVariables.set(\"productId\", match[1]);\r",
+                  "    console.log(\"Product ID saved to collection variables:\", match[1]);\r",
+                  "}\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Example Product-5\",\r\n  \"description\": \"This is an example product.\",\r\n  \"price\": 100,\r\n  \"category\": \"Electronics\",\r\n  \"manufacturer\": \"Example Manufacturer\",\r\n  \"imageUrl\": \"http://example.com/image.jpg\",\r\n  \"freeShipping\": true\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/add-product",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "add-product"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "400 - Ошибка в данных продукта",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Example Product-5\",\r\n  \"description\": \"This is an example product.\",\r\n  \"price\": 100$,\r\n  \"category\": \"Electronics\",\r\n  \"manufacturer\": \"Example Manufacturer\",\r\n  \"imageUrl\": \"http://example.com/image.jpg\",\r\n  \"freeShipping\": true\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/add-product",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "add-product"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "",
+              "header": [],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "Полное обновление товара по ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is less than 500ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Phone Apple\",\r\n  \"description\": \"This is an example product.\",\r\n  \"price\": 150,\r\n  \"category\": \"Phones\",\r\n  \"manufacturer\": \"Apple\",\r\n  \"imageUrl\": \"http://example.com/image.jpg\",\r\n  \"freeShipping\": true\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/products/id/{{productId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "products",
+                "id",
+                "{{productId}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "404 - Товар с таким ID не найден",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Phone Apple\",\r\n  \"description\": \"This is an example product.\",\r\n  \"price\": 150,\r\n  \"category\": \"Phones\",\r\n  \"manufacturer\": \"Apple\",\r\n  \"imageUrl\": \"http://example.com/image.jpg\",\r\n  \"freeShipping\": true\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/products/id/261720",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products",
+                    "id",
+                    "261720"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "",
+              "header": [],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": ""
+            },
+            {
+              "name": "400 - Неверные данные продукта",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Phone Apple\",\r\n  \"description\": \"This is an example product.\",\r\n  \"price\": 150,\r\n  \"category\": \"Phones\",\r\n  \"manufacturer\": \"Apple\",\r\n  \"imageUrl\": \"http://example.com/image.jpg\",\r\n  \"freeShipping\": 1\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/products/id/{{productId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products",
+                    "id",
+                    "{{productId}}"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "",
+              "header": [],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "Частичное обновление товара по ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Response time is less than 500ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Example Phone - Apple\",\r\n  \"description\": \"This is a Phone.\",\r\n  \"price\": 250,\r\n  \"category\": \"Phones\",\r\n  \"manufacturer\": \"Apple\",\r\n  \"imageUrl\": \"http://example.com/image.jpg\",\r\n  \"freeShipping\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/products/id/{{productId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "products",
+                "id",
+                "{{productId}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "404 - Товар с таким ID не найден",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Example Phone - Apple\",\r\n  \"description\": \"This is a Phone.\",\r\n  \"price\": 250,\r\n  \"category\": \"Phones\",\r\n  \"manufacturer\": \"Apple\",\r\n  \"imageUrl\": \"http://example.com/image.jpg\",\r\n  \"freeShipping\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/products/id/261720",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products",
+                    "id",
+                    "261720"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": "Товар с таким ID не найден"
+            },
+            {
+              "name": "400 - Неверные данные продукта",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Example Phone - Apple\",\r\n  \"description\": 0,\r\n  \"price\": 250$,\r\n  \"category\": \"Phones\",\r\n  \"manufacturer\": 0,\r\n  \"imageUrl\": \"http://example.com/image.jpg\",\r\n  \"freeShipping\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/products/id/{{productId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products",
+                    "id",
+                    "{{productId}}"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            }
+          ]
+        },
+        {
+          "name": "Удаление товара по ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is less than 500ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/products/id/{{productId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "products",
+                "id",
+                "{{productId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Поиск товаров по категории",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "pm.test(\"Response time is less than 500ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"The received list of products matches the request\", function () {\r",
+                  "    const category = pm.request.url.query.get(\"category\");\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an('array');\r",
+                  "    \r",
+                  "       response.forEach(product => {\r",
+                  "        pm.expect(product).to.have.property('category');\r",
+                  "        pm.expect(product.category).to.equal(category);\r",
+                  "    });\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/products/FindByCategory?category={{category}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "products",
+                "FindByCategory"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "{{category}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "404 - Товары в данной категории не найдены",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/products/FindByCategory?category=glasses",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products",
+                    "FindByCategory"
+                  ],
+                  "query": [
+                    {
+                      "key": "category",
+                      "value": "glasses"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "",
+              "header": [],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "Поиск товаров по производителю",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "pm.test(\"Response time is less than 500ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"The received list of products matches the request\", function () {\r",
+                  "    const manufacturer = pm.request.url.query.get(\"manufacturer\");\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an('array');\r",
+                  "    \r",
+                  "       response.forEach(product => {\r",
+                  "        pm.expect(product).to.have.property('manufacturer');\r",
+                  "        pm.expect(product.manufacturer).to.equal(manufacturer);\r",
+                  "    });\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/products/FindByManufacturer?manufacturer={{manufacturer}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "products",
+                "FindByManufacturer"
+              ],
+              "query": [
+                {
+                  "key": "manufacturer",
+                  "value": "Apple",
+                  "disabled": true
+                },
+                {
+                  "key": "manufacturer",
+                  "value": "Xiaomi",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "manufacturer",
+                  "value": "Huawei",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "manufacturer",
+                  "value": "Samsung",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "manufacturer",
+                  "value": "{{manufacturer}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "404 - Товары данного производителя не найдены",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/products/FindByManufacturer?manufacturer=LG",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products",
+                    "FindByManufacturer"
+                  ],
+                  "query": [
+                    {
+                      "key": "manufacturer",
+                      "value": "Apple",
+                      "disabled": true
+                    },
+                    {
+                      "key": "manufacturer",
+                      "value": "Xiaomi",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "manufacturer",
+                      "value": "Huawei",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "manufacturer",
+                      "value": "Samsung",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "manufacturer",
+                      "value": "LG"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            }
+          ]
+        },
+        {
+          "name": "Фильтрация списка продуктов",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK. Successful\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is less than 500ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"The received list of products matches the request\", function () {\r",
+                  "\r",
+                  "const category = pm.request.url.query.get(\"category\");\r",
+                  "const manufacturer = pm.request.url.query.get(\"manufacturer\");\r",
+                  "const freeShipping = pm.request.url.query.get(\"freeShipping\");\r",
+                  "const minPrice = Number(pm.request.url.query.get(\"minPrice\"));\r",
+                  "const maxPrice = Number(pm.request.url.query.get(\"maxPrice\"));\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "pm.expect(response).to.be.an('array');  \r",
+                  "\r",
+                  "response.forEach(product => {\r",
+                  "    pm.expect(product).to.have.property('category').that.is.a('string');;\r",
+                  "    pm.expect(product.category).to.equal(category);\r",
+                  "\r",
+                  "    pm.expect(product).to.have.property('manufacturer').that.is.a('string');;\r",
+                  "    pm.expect(product.manufacturer).to.equal(manufacturer);\r",
+                  "\r",
+                  "    pm.expect(product).to.have.property('freeShipping').that.is.oneOf([0, 1]);\r",
+                  "      if (freeShipping === \"true\") {\r",
+                  "        pm.expect(product.freeShipping).to.equal(1);\r",
+                  "    } else if (freeShipping === \"false\") {\r",
+                  "        pm.expect(product.freeShipping).to.equal(0);\r",
+                  "    }\r",
+                  "    pm.expect(product).to.have.property('price').that.is.a('string');\r",
+                  "\r",
+                  "    const res_price = Number(product.price);\r",
+                  "    pm.expect(res_price).to.be.at.least(minPrice);\r",
+                  "    pm.expect(res_price).to.be.at.most(maxPrice);\r",
+                  "    });\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/products/filter?category={{category}}&manufacturer={{manufacturer}}&freeShipping={{freeShipping}}&minPrice=100&maxPrice=1500",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "products",
+                "filter"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "{{category}}"
+                },
+                {
+                  "key": "manufacturer",
+                  "value": "{{manufacturer}}"
+                },
+                {
+                  "key": "freeShipping",
+                  "value": "{{freeShipping}}"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "100"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "1500"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Поиск товаров с бесплатной доставкой",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is less than 500ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"The received list of products matches the request\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an('array');\r",
+                  "    \r",
+                  "       response.forEach(product => {\r",
+                  "        pm.expect(product).to.have.property('freeShipping').that.is.a('number');\r",
+                  "        pm.expect(product.freeShipping).to.equal(1);\r",
+                  "    });\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/products/FindByShipping?freeShipping=true",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "products",
+                "FindByShipping"
+              ],
+              "query": [
+                {
+                  "key": "freeShipping",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Поиск товара по ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is less than 500ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"The ID of the product found matches the product ID from the request\", function () {\r",
+                  "    const productId = Number(pm.collectionVariables.get(\"productId\"));\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.have.property('product_id').that.is.a('number');\r",
+                  "    pm.expect(response.product_id).to.equal(productId); \r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/products/id/{{productId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "products",
+                "id",
+                "{{productId}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "404 - Товар с таким ID не найден",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{url}}/products/id/271620",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "products",
+                    "id",
+                    "271620"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": "Товар с таким ID не найден"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Добавление товара в корзину пользователя",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK. Successful\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is less than 500ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Тело ответа содержит информацию о добавлении товара в корзину\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Товар добавлен в корзину пользователя с ID:\");\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"productId\": 35,\r\n  \"quantity\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/cart",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "cart"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Получить содержимое корзины",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "const responseTime = pm.response.responseTime;\r",
+                  "pm.test(\"Response time is \" + responseTime + \"ms (should be less than 500 ms)\", function () {\r",
+                  "    pm.expect(responseTime).to.be.below(500);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Ответ является массивом продуктов с корректной структурой\", function () {\r",
+                  "let responseData = pm.response.json();\r",
+                  "\r",
+                  "// Проверка, что ответ является массивом\r",
+                  "pm.expect(Array.isArray(responseData)).to.be.true;\r",
+                  "    \r",
+                  "// Проверка, что каждый объект в массиве имеет правильную структуру\r",
+                  "    if (Array.isArray(responseData)) {\r",
+                  "        responseData.forEach((item) => {\r",
+                  "            pm.expect(item).to.have.property('cart_item_id').that.is.a('number');\r",
+                  "            pm.expect(item).to.have.property('quantity').that.is.a('number');\r",
+                  "            pm.expect(item).to.have.property('product_id').that.is.a('number');\r",
+                  "            pm.expect(item).to.have.property('name').that.is.a('string');\r",
+                  "            pm.expect(item).to.have.property('price').that.is.a('string');\r",
+                  "            pm.expect(item).to.have.property('imageUrl').that.is.a('string');\r",
+                  "        });\r",
+                  "    }\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{url}}/getCart",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "getCart"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Обновление количества товара в корзине",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "const responseTime = pm.response.responseTime;\r",
+                  "pm.test(\"Response time is \" + responseTime + \"ms (should be less than 500 ms)\", function () {\r",
+                  "    pm.expect(responseTime).to.be.below(500);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Тело ответа содержит сообщение об успешном обновлении количества товара в корзине\", function () {\r",
+                  "    let responseData = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(responseData).to.have.property('message').to.be.a('string');\r",
+                  "    pm.expect(responseData.message).to.equal('Количество товара в корзине обновлено');\r",
+                  "\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"quantity\": 3\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/cart/{{cartItemId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "cart",
+                "{{cartItemId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Удаление товара из корзины",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "const responseTime = pm.response.responseTime;\r",
+                  "pm.test(\"Response time is \" + responseTime + \"ms (should be less than 500 ms)\", function () {\r",
+                  "    pm.expect(responseTime).to.be.below(500);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Тело ответа содержит информацию об удалении товара из корзины\", function () {\r",
+                  "\r",
+                  "    const cartItemId = pm.request.url.path[pm.request.url.path.indexOf('cart') + 1];\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Товар с ID: \" + cartItemId + \" удален из корзины\");\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/cart/{{cartItemId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "cart",
+                "{{cartItemId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Регистрация нового пользователя",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"{{username}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/register",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавление нового пользователя",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"user15\",\r\n  \"password\": \"password15\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Получение всех user_id и login пользователей",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK. Successful\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"User found, user ID saved to variable\", function () {\r",
+                  "\r",
+                  "    const username = pm.collectionVariables.get(\"username\");\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an('array');\r",
+                  "    let found = false; \r",
+                  "\r",
+                  "    response.forEach(user => {\r",
+                  "        pm.expect(user).to.have.property('login');\r",
+                  "        pm.expect(user).to.have.property('user_id');\r",
+                  "\r",
+                  "        if (user.login === username){\r",
+                  "            found = true;\r",
+                  "            const user_id = user.user_id;\r",
+                  "            pm.collectionVariables.set(\"user_id\", user_id);\r",
+                  "        }\r",
+                  "    });\r",
+                  "\r",
+                  "    if (found) {\r",
+                  "        console.log(\"Пользователь найден, ID пользователя сохранен в переменную\");\r",
+                  "    } else {\r",
+                  "        console.log(\"Пользователь НЕ найден\");\r",
+                  "        pm.expect.fail(\"User not found\");\r",
+                  "    }\r",
+                  "});\r",
+                  "\r",
+                  "    "
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/users",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Авторизация пользователя",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK. Successful\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"User authorization successful.Token is saved to collection variables 'key'\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "    const token = response.token;\r",
+                  "\r",
+                  "    pm.collectionVariables.set(\"key\", token);\r",
+                  "\r",
+                  "    pm.expect(token).to.not.be.undefined;\r",
+                  "    console.log(\"Token is saved to collection variables\");\r",
+                  "});\r",
+                  "   "
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"{{username}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/login",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Удаление пользователя по ID",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/users/{{user_id}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Получение списка всех заказов пользователя",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/user-orders",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "user-orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Создание заказа из товаров в корзине пользователя",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/orders",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Изменение количества товара в заказе",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"quantity\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/orders/:orderId/products/:productId",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "orders",
+                ":orderId",
+                "products",
+                ":productId"
+              ],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "4055"
+                },
+                {
+                  "key": "productId",
+                  "value": "50"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Обновление общей суммы заказов пользователя",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/update-orders-total",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "update-orders-total"
+              ]
+            },
+            "description": "Вызов этого метода приведет к пересчету и обновлению общей суммы всех неоплаченных заказов пользователя"
+          },
+          "response": []
+        },
+        {
+          "name": "Получение данных об оплаченных заказах",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/orders-history",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "orders-history"
+              ]
+            },
+            "description": "Получает данные об оплаченных заказах для авторизованного пользователя."
+          },
+          "response": []
+        },
+        {
+          "name": "Удаление товара из заказа",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/orders/:orderId/products/:productId",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "orders",
+                ":orderId",
+                "products",
+                ":productId"
+              ],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "4055"
+                },
+                {
+                  "key": "productId",
+                  "value": "50"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "Оплата заказов пользователя",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"card_type\": \"VISA\",\r\n  \"card_code\": \"8820354696467284\",\r\n  \"expiry_month\": 12,\r\n  \"expiry_year\": 26,\r\n  \"cvv\": \"123\",\r\n  \"email\": \"valid@email.com\",\r\n  \"email_paypal\": \"valid@email.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/pay",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "pay"
+              ]
+            },
+            "description": "Процесс оплаты заказов с использованием карты или PayPal. Валидация входных данных осуществляется в зависимости от выбранного метода оплаты"
+          },
+          "response": []
+        },
+        {
+          "name": "Обновление балансов карт и PayPal через GET запрос",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/updateBalances",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "updateBalances"
+              ]
+            },
+            "description": "Использует GET запрос для обновления баланса на всех картах, кроме card_id = 7 и 8, и всех PayPal учетных записях до 2000. Авторизация и проверка статуса не требуются."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "DataBase",
+      "item": [
+        {
+          "name": "Сброс базы данных",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}{url}/api/reset-database",
+              "host": [
+                "{{url}}{url}"
+              ],
+              "path": [
+                "api",
+                "reset-database"
+              ]
+            },
+            "description": "Удаляет все данные из базы данных и приводит её к первоначальной форме."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url",
+      "value": ""
+    },
+    {
+      "key": "productId",
+      "value": ""
+    },
+    {
+      "key": "username",
+      "value": ""
+    },
+    {
+      "key": "password",
+      "value": ""
+    },
+    {
+      "key": "key",
+      "value": ""
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

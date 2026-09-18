@@ -1,0 +1,687 @@
+{
+  "info": {
+    "_postman_id": "23785872-c8c4-4591-9968-20c75cb472b9",
+    "name": "PetStore",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51891817",
+    "_collection_link": "https://go.postman.co/collection/51891817-23785872-c8c4-4591-9968-20c75cb472b9?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Pet",
+      "item": [
+        {
+          "name": "Find pet by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{url}}/pet/{{petID}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "pet",
+                "{{petID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a pet",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/pet/{{petID}}?api_key=special-key",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "pet",
+                "{{petID}}"
+              ],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "special-key"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Updates a pet in the store with form data",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Pushok",
+                  "type": "text",
+                  "uuid": "e1d1c023-dfb4-452d-8d2d-a58dc672d3d1"
+                },
+                {
+                  "key": "status",
+                  "value": "sold",
+                  "type": "text",
+                  "uuid": "f41043f6-e25f-4b4b-8925-fa3d33b6fb5b"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/pet/{{petID}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "pet",
+                "{{petID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update an existing pet",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": {{petID}},\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"string\"\r\n  },\r\n  \"name\": \"fox\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/pet",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "pet"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Uploads an image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "additionalMetadata",
+                  "value": "jpeg",
+                  "type": "text",
+                  "uuid": "86fa6c77-5735-4900-9c3e-67d14e76a562"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "bd8358ce-bccb-4447-8109-9ed284acfe2f",
+                  "src": "7B5qQaqIC/car.JPG"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/pet/{{petID}}/uploadImage",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "pet",
+                "{{petID}}",
+                "uploadImage"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Finds Pets by status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/pet/findByStatus?status=sold",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "pet",
+                "findByStatus"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "available",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "sold",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add a new pet to the store",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "//------- Проверка статус кода 200\r",
+                  "pm.test(\"Status code is 200. Successful\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "//---------- Проверка headers Content-Type: application/json\r",
+                  "pm.test(\"headers correct: Content-Type: application/json\", () => {\r",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+                  "        .to.include(\"application/json\");\r",
+                  "});\r",
+                  "\r",
+                  "//---------- Проверка свойств и типов данных полей\r",
+                  "const jsonData = pm.response.json();\r",
+                  "pm.test(\"The response test data type is correct\", () => {\r",
+                  "    pm.expect(jsonData).to.be.an(\"object\");\r",
+                  "\r",
+                  "    // базовые поля\r",
+                  "    pm.expect(jsonData).to.have.property(\"id\");\r",
+                  "    pm.expect(jsonData.id).to.be.a(\"number\");\r",
+                  "\r",
+                  "    pm.expect(jsonData).to.have.property(\"name\");\r",
+                  "    pm.expect(jsonData.name).to.be.a(\"string\");\r",
+                  "\r",
+                  "    pm.expect(jsonData).to.have.property(\"status\");\r",
+                  "    pm.expect(jsonData.status).to.be.a(\"string\");\r",
+                  "\r",
+                  "    // category\r",
+                  "    pm.expect(jsonData.category).to.be.an(\"object\");\r",
+                  "    pm.expect(jsonData.category.id).to.be.a(\"number\");\r",
+                  "    pm.expect(jsonData.category.name).to.be.a(\"string\");\r",
+                  "\r",
+                  "    // photoUrls\r",
+                  "    pm.expect(jsonData.photoUrls).to.be.an(\"array\");\r",
+                  "    pm.expect(jsonData.photoUrls[0]).to.be.a(\"string\");\r",
+                  "\r",
+                  "    // tags\r",
+                  "    pm.expect(jsonData.tags).to.be.an(\"array\");\r",
+                  "    if (jsonData.tags.length > 0) {\r",
+                  "        pm.expect(jsonData.tags[0].id).to.be.a(\"number\");\r",
+                  "        pm.expect(jsonData.tags[0].name).to.be.a(\"string\");\r",
+                  "    }\r",
+                  "});\r",
+                  "\r",
+                  "//---------- Проверка данных в сравнении с запросом (через eql)\r",
+                  "const res = pm.response.json();\r",
+                  "const req = JSON.parse(pm.request.body.raw);\r",
+                  "\r",
+                  "// Функция сравнения с request\r",
+                  "function checkEqual(res, req, field) {\r",
+                  "    pm.expect(res[field]).to.eql(req[field]);\r",
+                  "}\r",
+                  "\r",
+                  "// Функция для массивов\r",
+                  "function checkArrayDeepEqual(resArr, reqArr) {\r",
+                  "  //  pm.expect(resArr).to.have.deep.members(reqArr);\r",
+                  "    pm.expect(resArr).to.deep.eql(reqArr);\r",
+                  "}\r",
+                  "\r",
+                  "pm.test(\"Введенные данные соответствуют запросу\", () => {\r",
+                  "    checkEqual(res, req, \"id\"); \r",
+                  "    checkEqual(res, req, \"name\"); \r",
+                  "    checkEqual(res, req, \"status\"); \r",
+                  "    //  pm.expect(res.name).to.eql(req.name);\r",
+                  "    //  pm.expect(res.status).to.eql(req.status);\r",
+                  "      \r",
+                  "    pm.expect(res.category).to.deep.eql(req.category);\r",
+                  "   // checkEqual(res.category, req.category, \"id\");\r",
+                  "   // checkEqual(res.category, req.category, \"name\");\r",
+                  "\r",
+                  "    checkArrayDeepEqual(res.photoUrls, req.photoUrls);\r",
+                  "    checkArrayDeepEqual(res.tags, req.tags);\r",
+                  "    // pm.expect(res.photoUrls).to.deep.eql(req.photoUrls);\r",
+                  "    // pm.expect(res.tags).to.deep.eql(req.tags);\r",
+                  "});\r",
+                  "\r",
+                  "//---------- Логируем время ответа (Открой Postman Console: Windows: Ctrl + Alt + C)\r",
+                  "const time = pm.response.responseTime;\r",
+                  "\r",
+                  "pm.test(\"Response time OK, below 800\", () => {\r",
+                  "    console.log(`Response time: ${time} ms`);\r",
+                  "    pm.expect(time).to.be.below(800);\r",
+                  " //   console.log(\"Full response:\", JSON.stringify(pm.response.json(), null, 2));  // -Выводим ответ в консоль\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": {{petID}},\r\n    \"category\": {\r\n        \"id\": {{categoryId}},\r\n        \"name\": \"{{categoryName}}\"\r\n    },\r\n    \"name\":\"{{$randomFirstName}}\",\r\n    \"photoUrls\": [\r\n        \"{{photoUrl}}\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": {{tagId}},\r\n            \"name\": \"{{tagName}}\"\r\n        }\r\n    ],\r\n    \"status\": \"{{status}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/pet",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "pet"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Store",
+      "item": [
+        {
+          "name": "Place an order for a pet",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": {{orderId}},\r\n  \"petId\": 57,\r\n  \"quantity\": 0,\r\n  \"shipDate\": \"2026-03-18T11:31:38.450Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/store/order",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "store",
+                "order"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Returns pet inventories by status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/store/inventory",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "store",
+                "inventory"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find purchase order by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/store/order/{{orderId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "store",
+                "order",
+                "{{orderId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete purchase order by ID",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/store/order/{{orderId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "store",
+                "order",
+                "{{orderId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Creates list of users with given input array",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n  {\r\n    \"id\": 0,\r\n    \"username\": \"{{username}}\",\r\n    \"firstName\": \"string\",\r\n    \"lastName\": \"string\",\r\n    \"email\": \"string\",\r\n    \"password\": \"string\",\r\n    \"phone\": \"string\",\r\n    \"userStatus\": 0\r\n  }\r\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/user/createWithList",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "user",
+                "createWithList"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get user by user name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/user/{{username}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "user",
+                "{{username}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Updated user",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 0,\r\n  \"username\": \"user2\",\r\n  \"firstName\": \"string\",\r\n  \"lastName\": \"string\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/user/{{username}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "user",
+                "{{username}}"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "string",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete user",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "/user/{{username}}",
+              "path": [
+                "user",
+                "{{username}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logs user into the system",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/user/login?username={{username}}&password=pass",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "user",
+                "login"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "{{username}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "pass",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logs out current logged in user session",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}//user/logout",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "",
+                "user",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Creates list of users with given input array",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n  {\r\n    \"id\": 501,\r\n    \"username\": \"user501\",\r\n    \"firstName\": \"name501\",\r\n    \"lastName\": \"lastname501\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"123\",\r\n    \"phone\": \"string\",\r\n    \"userStatus\": 0\r\n  },\r\n    {\r\n    \"id\": 502,\r\n    \"username\": \"user502\",\r\n    \"firstName\": \"name502\",\r\n    \"lastName\": \"lastname502\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"456\",\r\n    \"phone\": \"string\",\r\n    \"userStatus\": 0\r\n  },  \r\n    {\r\n    \"id\": 503,\r\n    \"username\": \"user503\",\r\n    \"firstName\": \"name503\",\r\n    \"lastName\": \"lastname503\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"789\",\r\n    \"phone\": \"string\",\r\n    \"userStatus\": 0\r\n  }  \r\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/user/createWithArray",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "user",
+                "createWithArray"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 0,\r\n  \"username\": \"string\",\r\n  \"firstName\": \"string\",\r\n  \"lastName\": \"string\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/user",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "user"
+              ]
+            },
+            "description": "StartFragmentThis can only be done by the logged in user.EndFragment"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url",
+      "value": ""
+    },
+    {
+      "key": "petID",
+      "value": ""
+    },
+    {
+      "key": "orderId",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "username",
+      "value": ""
+    }
+  ]
+}
